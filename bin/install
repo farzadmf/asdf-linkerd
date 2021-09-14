@@ -7,7 +7,8 @@ set -o pipefail
 [ -n "$ASDF_INSTALL_PATH" ] || (>&2 echo 'Missing ASDF_INSTALL_PATH' && exit 1)
 
 get_platform () {
-	local platform="$(uname | tr '[:upper:]' '[:lower:]')"
+	local platform
+	platform="$(uname | tr '[:upper:]' '[:lower:]')"
 
 	case "$platform" in
 		linux|darwin|freebsd)
@@ -19,7 +20,7 @@ get_platform () {
 			;;
 	esac
 
-	echo -n ${platform}
+	echo -n "${platform}"
 }
 
 get_arch () {
@@ -78,11 +79,11 @@ checksumbin=$(command -v openssl) || checksumbin=$(command -v shasum) || {
 my_mktemp () {
 	local tempdir=""
 	if [ "linux" = "$1" ] ; then
-		tempdir=$(mktemp -d asdf-helm.XXXX)
+		tempdir=$(mktemp -d asdf-linkerd.XXXX)
 	else
-		tempdir=$(mktemp -dt asdf-helm.XXXX)
+		tempdir=$(mktemp -dt asdf-linkerd.XXXX)
 	fi
-	echo -n $tempdir
+	echo -n "$tempdir"
 }
 
 install_linkerd () {
@@ -92,7 +93,10 @@ install_linkerd () {
 	local platform=$(get_platform)
 	local arch=$(get_arch)
 	local tempdir=$(my_mktemp $platform)
+
 	local src_file="linkerd2-cli-stable-${version}-${platform}"
+	[[ $platform == 'linux' ]] && src_file="${src_file}-${arch}"
+
 	local download_url=$(get_download_url $version $src_file)
 	local bin_install_path="${install_path}/bin"
 
@@ -104,7 +108,7 @@ install_linkerd () {
 	mv "${tempdir}/linkerd" "${bin_install_path}"
 	chmod +x "${bin_install_path}/linkerd"
 
-	rm -rf $tempdir 
+	rm -rf $tempdir
 }
 
 install_linkerd $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH

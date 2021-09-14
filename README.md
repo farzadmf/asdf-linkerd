@@ -1,12 +1,19 @@
 ![CI](https://github.com/team-gary/asdf-linkerd/workflows/CI/badge.svg)
 
+Changes in this fork:
+- Does **NOT** work on Mac because it uses `sort -V` to sort the versions
+- Only filters on `stable` versions
+- Fixes the issue with installation where checksum is always invalid
+
+---
+
 # asdf-linkerd
 linkerd plugin for [asdf](https://github.com/asdf-vm/asdf) version manager
 
 ## Install
 
 ```
-asdf plugin-add linkerd https://github.com/team-gary/asdf-linkerd.git
+asdf plugin-add linkerd https://github.com/farzadmf/asdf-linkerd.git
 ```
 
 ## Use

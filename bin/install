@@ -79,7 +79,7 @@ checksumbin=$(command -v openssl) || checksumbin=$(command -v shasum) || {
 my_mktemp () {
 	local tempdir=""
 	if [ "linux" = "$1" ] ; then
-		tempdir=$(mktemp -d asdf-linkerd.XXXX)
+		tempdir=$(mktemp -p /tmp -d asdf-linkerd.XXXX)
 	else
 		tempdir=$(mktemp -dt asdf-linkerd.XXXX)
 	fi
@@ -93,6 +93,8 @@ install_linkerd () {
 	local platform=$(get_platform)
 	local arch=$(get_arch)
 	local tempdir=$(my_mktemp $platform)
+
+	echo "tempdir = $tempdir"
 
 	local src_file="linkerd2-cli-stable-${version}-${platform}"
 	[[ $platform == 'linux' ]] && src_file="${src_file}-${arch}"
